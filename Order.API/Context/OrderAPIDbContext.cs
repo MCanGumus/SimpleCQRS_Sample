@@ -9,8 +9,8 @@ namespace Order.API.Context
         }
 
 
-        public DbSet<Order.API.Entities.Order> Orders { get; set; }
-        public DbSet<Order.API.Entities.Customer> Customers{ get; set; }
-        public DbSet<Order.API.Entities.Address> Addresses { get; set; }
+        public DbSet<Order.API.Entities.OrderEntity> Orders { get; set; }
+        public DbSet<Order.API.Entities.CustomerEntity> Customers{ get; set; }
+        public DbSet<Order.API.Entities.AddressEntity> Addresses { get; set; }
     }
 }

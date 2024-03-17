@@ -1,33 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Order.API.Context;
 using Order.API.Entities;
+using Order.API.MediatR_CQRS.Commands.Requests.Address;
+using Order.API.MediatR_CQRS.Queries.Requests.Address;
 using Order.API.ViewModels;
 
 namespace Order.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddressesController(OrderAPIDbContext context) : ControllerBase
+    public class AddressesController(IMediator mediator) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> CreateAddress(CreateAddressVM createAddress)
-        {
-            Address address = new()
-            {
-                AddressId = Guid.NewGuid(),
-                City = createAddress.City,
-                CityCode = createAddress.CityCode,
-                Country = createAddress.Country,
-                AddressLine = createAddress.AddressLine,
-            };
+        public async Task<IActionResult> Post([FromBody] CreateAddressCommandRequest request) 
+            => Ok(await mediator.Send(request));
 
-            context.Addresses.Add(address);
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdateAddressCommandRequest request)
+            => Ok(await mediator.Send(request));
 
-            await context.SaveChangesAsync();
+        [HttpDelete("{AddressId}")]
+        public async Task<IActionResult> Delete([FromRoute] DeleteAddressCommandRequest request)
+            => Ok(await mediator.Send(request));
 
-            return Ok(address.AddressId);
-        }
+        [HttpGet("{AddressId}")]
+        public async Task<IActionResult> Get([FromRoute] GetAddressByIdQueryRequest request)
+                  => Ok(await mediator.Send(request));
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromRoute] GetAllAdressesQueryRequest request)
+                  => Ok(await mediator.Send(request));
 
     }
 }

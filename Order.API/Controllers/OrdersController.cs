@@ -12,7 +12,7 @@ namespace Order.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderVM createOrder)
         {
-            Order.API.Entities.Order order = new()
+            Order.API.Entities.OrderEntity order = new()
             {
                 OrderId = Guid.NewGuid(),
                 AddressId = createOrder.AddressId,

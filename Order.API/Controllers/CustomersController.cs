@@ -13,7 +13,7 @@ namespace Order.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCustomer(CreateCustomerVM createCustomer)
         {
-            Customer customer = new()
+            CustomerEntity customer = new()
             {
                 CustomerId = Guid.NewGuid(),
                 AddressId = createCustomer.AddressId,

@@ -1,14 +1,29 @@
 ﻿using MediatR;
+using Order.API.Context;
+using Order.API.Entities;
 using Order.API.MediatR_CQRS.Commands.Requests.Customer;
 using Order.API.MediatR_CQRS.Commands.Responses.Customer;
 
 namespace Order.API.MediatR_CQRS.Handlers.CommandHandlers.Customer
 {
-    public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>
+    public class CreateCustomerCommandHandler(OrderAPIDbContext context) : IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>
     {
-        Task<CreateCustomerCommandResponse> IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>.Handle(CreateCustomerCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreateCustomerCommandResponse> IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>.Handle(CreateCustomerCommandRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            CustomerEntity customerEntity = new()
+            {
+                CustomerId = Guid.NewGuid(),
+                Email = request.Email,
+                Name = request.Name,
+                AddressId = request.AddressId,
+                CreatedAt = DateTime.Now,
+            };
+
+            context.Customers.Add(customerEntity);
+
+            await context.SaveChangesAsync();
+
+            return new CreateCustomerCommandResponse() { CustomerId = customerEntity.CustomerId};
         }
     }
 }
