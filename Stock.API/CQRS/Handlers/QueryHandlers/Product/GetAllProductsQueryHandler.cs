@@ -15,6 +15,7 @@ namespace Stock.API.CQRS.Handlers.QueryHandlers.Product
 
             return products.Select(prod => new GetAllProductQueryResponse
             {
+                ProductId = prod.ProductId,
                 ImageUrl = prod.ImageUrl,
                 Name = prod.Name,
                 Quantity = prod.Quantity,

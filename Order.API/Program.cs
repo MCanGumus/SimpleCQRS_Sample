@@ -10,6 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+#region Mediatr CQRS
+builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssembly(typeof(OrderAPIDbContext).Assembly));
+
+#endregion
 builder.Services.AddDbContext<OrderAPIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder => builder.MigrationsAssembly("Order.API"));
