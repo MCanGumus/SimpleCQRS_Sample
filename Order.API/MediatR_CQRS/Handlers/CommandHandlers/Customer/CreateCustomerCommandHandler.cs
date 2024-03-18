@@ -8,7 +8,7 @@ namespace Order.API.MediatR_CQRS.Handlers.CommandHandlers.Customer
 {
     public class CreateCustomerCommandHandler(OrderAPIDbContext context) : IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>
     {
-        public async Task<CreateCustomerCommandResponse> IRequestHandler<CreateCustomerCommandRequest, CreateCustomerCommandResponse>.Handle(CreateCustomerCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreateCustomerCommandResponse> Handle(CreateCustomerCommandRequest request, CancellationToken cancellationToken)
         {
             CustomerEntity customerEntity = new()
             {

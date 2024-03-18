@@ -9,7 +9,7 @@ using Order.API.ViewModels;
 
 namespace Order.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AddressesController(IMediator mediator) : ControllerBase
     {

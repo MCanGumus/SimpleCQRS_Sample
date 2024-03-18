@@ -1,34 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Order.API.Context;
+using Order.API.MediatR_CQRS.Commands.Requests.Customer;
+using Order.API.MediatR_CQRS.Commands.Requests.Order;
+using Order.API.MediatR_CQRS.Queries.Requests.Customer;
+using Order.API.MediatR_CQRS.Queries.Requests.Order;
 using Order.API.ViewModels;
 
 namespace Order.API.Controllers 
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrdersController(OrderAPIDbContext context) : ControllerBase
+    public class OrdersController(IMediator mediator) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(CreateOrderVM createOrder)
-        {
-            Order.API.Entities.OrderEntity order = new()
-            {
-                OrderId = Guid.NewGuid(),
-                AddressId = createOrder.AddressId,
-                Count = createOrder.Count,
-                CustomerId = createOrder.CustomerId,
-                ProductId = createOrder.ProductId,
-                TotalPrice = createOrder.Count * createOrder.Price,
-                CreatedDate = DateTime.Now,
-                Status = "Waiting",
-            };
+        public async Task<IActionResult> Post([FromBody] CreateOrderCommandRequest request)
+             => Ok(await mediator.Send(request));
 
-            context.Orders.Add(order);
-            
-            await context.SaveChangesAsync();
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdateOrderCommandRequest request)
+            => Ok(await mediator.Send(request));
 
-            return Ok();
-        }
+        [HttpDelete("{OrderId}")]
+        public async Task<IActionResult> Delete([FromRoute] DeleteOrderCommandRequest request)
+            => Ok(await mediator.Send(request));
+
+        [HttpGet("{OrderId}")]
+        public async Task<IActionResult> Get([FromRoute] GetOrderByIdQueryRequest request)
+                  => Ok(await mediator.Send(request));
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromRoute] GetAllOrderQueryRequest request)
+                  => Ok(await mediator.Send(request));
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace Order.API.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Order.API.Entities
 {
     public class CustomerEntity
     {
+        [Key]
         public Guid CustomerId { get; set; }
         public required string Name{ get; set; }
         public required string Email { get; set; }

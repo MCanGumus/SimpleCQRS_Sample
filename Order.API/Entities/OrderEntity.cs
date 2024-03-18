@@ -1,7 +1,10 @@
-﻿namespace Order.API.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Order.API.Entities
 {
     public class OrderEntity
     {
+        [Key]
         public Guid OrderId { get; set; }
 
         public Guid CustomerId { get; set; }

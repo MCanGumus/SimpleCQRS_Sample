@@ -10,6 +10,7 @@ namespace Order.API.MediatR_CQRS.Handlers.QueryHandlers.Address
     {
         public async Task<List<GetAllAddressesQueryResponse>> Handle(GetAllAdressesQueryRequest request, CancellationToken cancellationToken)
         {
+            var list = context.Addresses.ToList();
             return await context.Addresses.Select(x => new GetAllAddressesQueryResponse
             {
                 City = x.City,
