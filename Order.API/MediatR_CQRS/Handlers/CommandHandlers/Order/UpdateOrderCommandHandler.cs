@@ -15,7 +15,6 @@ namespace Order.API.MediatR_CQRS.Handlers.CommandHandlers.Order
 
             if (orderEntity == null) { return new UpdateOrderCommandResponse() { IsSuccess = false }; }
 
-            orderEntity.Status = request.Status;
             orderEntity.AddressId = request.AddressId;
             orderEntity.ProductId = request.ProductId;
             orderEntity.TotalPrice = request.TotalPrice;

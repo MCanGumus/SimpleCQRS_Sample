@@ -1,5 +1,8 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Order.API.Consumer;
 using Order.API.Context;
+using Shared.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,17 @@ builder.Services.AddDbContext<OrderAPIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder => builder.MigrationsAssembly("Order.API"));
 });
+
+builder.Services.AddMassTransit(configurator =>
+{
+    configurator.AddConsumer<StockUpdatedEventConsumer>();
+    configurator.UsingRabbitMq((context, _configurator) =>
+    {
+        _configurator.Host(builder.Configuration["RabbitMQ"]);
+        _configurator.ReceiveEndpoint(RabbitMQSettings.Order_StockUpdatedEventQueue, e => e.ConfigureConsumer<StockUpdatedEventConsumer>(context));
+    });
+});
+
 
 var app = builder.Build();
 

@@ -1,4 +1,7 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Shared.Settings;
+using Stock.API.Consumers;
 using Stock.API.Context;
 using Stock.API.CQRS.Handlers.CommandHandlers.Product;
 using Stock.API.CQRS.Handlers.QueryHandlers.Product;
@@ -27,6 +30,15 @@ builder.Services.AddDbContext<StockAPIDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder => builder.MigrationsAssembly("Stock.API"));
 });
 
+builder.Services.AddMassTransit(configurator =>
+{
+    configurator.AddConsumer<OrderCreatedEventConsumer>();
+    configurator.UsingRabbitMq((context, _configurator) =>
+    {
+        _configurator.Host(builder.Configuration["RabbitMQ"]);
+        _configurator.ReceiveEndpoint(RabbitMQSettings.Stock_OrderCreatedEventQueue, e => e.ConfigureConsumer<OrderCreatedEventConsumer>(context));
+    });
+});
 
 var app = builder.Build();
 
