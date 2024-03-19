@@ -17,12 +17,12 @@ namespace Stock.API.Consumers
 
             if (product == null) 
             {
-
+                return;
             }
 
             if (product.Quantity < context.Message.Count)
             {
-
+                return;
             }
             product.Quantity -= context.Message.Count;
 

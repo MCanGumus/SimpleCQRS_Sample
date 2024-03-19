@@ -37,7 +37,7 @@ builder.Services.AddMassTransit(configurator =>
     configurator.UsingRabbitMq((context, _configurator) =>
     {
         _configurator.Host(builder.Configuration["RabbitMQ"]);
-        _configurator.ReceiveEndpoint(RabbitMQSettings.Order_StockUpdatedEventQueue, e => e.ConfigureConsumer<StockUpdatedEventConsumer>(context));
+        _configurator.ReceiveEndpoint("queue:" + RabbitMQSettings.Order_StockUpdatedEventQueue, e => e.ConfigureConsumer<StockUpdatedEventConsumer>(context));
     });
 });
 

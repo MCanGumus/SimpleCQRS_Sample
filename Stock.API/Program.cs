@@ -27,7 +27,14 @@ builder.Services.AddScoped<CreateProductCommandHandler>()
 
 builder.Services.AddDbContext<StockAPIDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder => builder.MigrationsAssembly("Stock.API"));
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection"), builder => builder.MigrationsAssembly("Order.API"));
+    }
+    else // In Development Environment
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection"), builder => builder.MigrationsAssembly("Order.API"));
+    }
 });
 
 builder.Services.AddMassTransit(configurator =>
@@ -36,20 +43,21 @@ builder.Services.AddMassTransit(configurator =>
     configurator.UsingRabbitMq((context, _configurator) =>
     {
         _configurator.Host(builder.Configuration["RabbitMQ"]);
-        _configurator.ReceiveEndpoint(RabbitMQSettings.Stock_OrderCreatedEventQueue, e => e.ConfigureConsumer<OrderCreatedEventConsumer>(context));
+        _configurator.ReceiveEndpoint("queue:" + RabbitMQSettings.Stock_OrderCreatedEventQueue, e => e.ConfigureConsumer<OrderCreatedEventConsumer>(context));
     });
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+    
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

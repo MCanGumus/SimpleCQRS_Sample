@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Order.API.Context;
 using Shared.Events;
 
-
 namespace Order.API.Consumer
 {
     public class StockUpdatedEventConsumer(OrderAPIDbContext ctx) : IConsumer<StockUpdatedEvent>
