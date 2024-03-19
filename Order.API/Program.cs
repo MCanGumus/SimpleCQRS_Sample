@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Order.API.Consumer;
 using Order.API.Context;
 using Shared.Settings;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +18,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssembly(typeof(OrderAPIDbContext).Assembly));
 
 #endregion
+
 builder.Services.AddDbContext<OrderAPIDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder => builder.MigrationsAssembly("Order.API"));
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection"), builder => builder.MigrationsAssembly("Order.API"));
+    }
+    else // In Development Environment
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection"), builder => builder.MigrationsAssembly("Order.API"));
+    }
 });
 
 builder.Services.AddMassTransit(configurator =>
@@ -42,7 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
