@@ -33,5 +33,10 @@ namespace Order.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromRoute] GetAllOrderQueryRequest request)
                   => Ok(await mediator.Send(request));
+
+        [HttpPut]
+        public async Task<IActionResult> ChangeStatus([FromBody] ChangeOrderStatusCommandRequest request)
+            => Ok(await mediator.Send(request));
+
     }
 }
