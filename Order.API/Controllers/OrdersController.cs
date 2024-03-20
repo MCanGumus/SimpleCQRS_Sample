@@ -6,7 +6,6 @@ using Order.API.MediatR_CQRS.Commands.Requests.Customer;
 using Order.API.MediatR_CQRS.Commands.Requests.Order;
 using Order.API.MediatR_CQRS.Queries.Requests.Customer;
 using Order.API.MediatR_CQRS.Queries.Requests.Order;
-using Order.API.ViewModels;
 
 namespace Order.API.Controllers 
 {
