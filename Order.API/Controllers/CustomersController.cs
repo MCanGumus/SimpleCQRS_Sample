@@ -35,7 +35,7 @@ namespace Order.API.Controllers
         public async Task<IActionResult> Get([FromRoute] GetAllCustomerQueryRequest request)
                   => Ok(await mediator.Send(request));
 
-        [HttpGet]
+        [HttpGet("{CustomerId}")]
         public async Task<IActionResult> Validate([FromRoute] ValidateCustomerQueryRequest request)
                   => Ok(await mediator.Send(request));
     }
