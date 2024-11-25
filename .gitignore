@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /.dockerignore
 /Order.API/Dockerfile
 /Order.API/Dockerfile.original
+/Order.API/appsettings.json
+/Stock.API/appsettings.json
