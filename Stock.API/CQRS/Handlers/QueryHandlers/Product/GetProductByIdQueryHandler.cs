@@ -10,7 +10,9 @@ namespace Stock.API.CQRS.Handlers.QueryHandlers.Product
         public async Task<GetProductByIdQueryResponse> Get
             (GetProductByIdQueryRequest request)
         {
-            Stock.API.Entities.Product product = await context.Products.FirstOrDefaultAsync(x => x.ProductId == request.ProductId);
+            Stock.API.Entities.Product product = 
+                await context.Products.FirstOrDefaultAsync(x => x.ProductId == request.ProductId);
+
 
             if (product == null)
             {
